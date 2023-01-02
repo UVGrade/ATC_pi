@@ -1,10 +1,21 @@
 import os
 import json
-import shutil
-import psutil
+import psutil, datetime
+import time
 #pip install psutil
 
 sys_temps="/sys/class/thermal/"
+
+def uptime():
+    tstamp= psutil.boot_time()
+    vals={
+        "timestamp":tstamp,
+        "uptime": int(time.time() - tstamp)
+    }
+    print(datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M:%S"))
+    return vals
+
+print(uptime())
 
 def temps():
     array = []
