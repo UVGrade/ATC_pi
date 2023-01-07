@@ -28,10 +28,27 @@ export default function System() {
     });
     return (
       <div>
-        <h1>System</h1>
         <h4>Last Restart on: {upT}</h4>
         <h4>Running for: {bootT}</h4>
+        <hr/>
+        <h2>Temps</h2>
+        <Widget><h5>75 °F</h5></Widget>
+        <hr/>
+        <h2>Storage</h2>
+        <hr/>
+        <h2>Networking</h2>
       </div>
     );
   }
 
+
+  function Widget(props){
+    return(
+      <div className="widgetCard">
+        <div className="widgetTop">CPU</div>
+        <div className="widgetCenter">75 °F</div>
+        <div className="widgetBtm"></div>
+        {/*<div>{props.children}</div>*/}
+      </div>
+    );
+  }
