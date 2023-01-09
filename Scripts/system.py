@@ -58,6 +58,9 @@ def temp_1(file):
         type=None
     return {
         "id":file,
+        "alias":file,
+        "temp_f":temp,
+        'temp_m':False,
         "temp":temp,
         "type":type
     }

@@ -7,6 +7,7 @@ const TodosContext = React.createContext({
 export default function System() {
     const [upT,setUpT] = useState('');
     const [bootT,setBootT]= useState('');
+    const [temps,setTemps]= useState([]);
     const fetchupT = async () => {
         const response = await fetch("http://localhost:8000/api/uptime")
         const TimeUp = await response.json()
@@ -22,17 +23,35 @@ export default function System() {
         setUpT(formatBoot)
         setBootT(uptFormat)
     }
+    const fetchTemps = async () => {
+        
+        const response = await fetch("http://localhost:8000/api/temps")
+        const tempJ= await response.json()
+        setTemps(tempJ)
+        console.log(temps)
+    }
+
     useEffect(() => {
         // call api or anything
         fetchupT()
-    });
+        fetchTemps()
+    },[]);
     return (
       <div>
         <h4>Last Restart on: {upT}</h4>
         <h4>Running for: {bootT}</h4>
         <hr/>
         <h2>Temps</h2>
-        <Widget><h5>75 °F</h5></Widget>
+        {temps.map(({id,temp_m,temp_f,alias})=>{
+          return(
+            <div key={id}>
+              <Widget title={alias}>{temp_f} °{temp_f?'F':'C'}</Widget>
+            </div>
+          );
+        })}
+        
+
+        <Widget title='CPU_dsfsdjfkjsdal;fjsdkl'>75 °F</Widget>
         <hr/>
         <h2>Storage</h2>
         <hr/>
@@ -43,12 +62,27 @@ export default function System() {
 
 
   function Widget(props){
+    var limit= 14
+    var title= Limit(props.title)
+    var sub= Limit(props.sub)
     return(
       <div className="widgetCard">
-        <div className="widgetTop">CPU</div>
-        <div className="widgetCenter">75 °F</div>
-        <div className="widgetBtm"></div>
-        {/*<div>{props.children}</div>*/}
+        <div className="widgetTop">{title}</div>
+        <div className="widgetCenter">{props.children}</div>
+        {sub!==undefined?<div className="widgetBtm">{sub}</div>:<></>}
       </div>
     );
+  }
+
+  function Limit(item){
+    var limit=14
+    if(item!==undefined){
+      if(item.length>limit){
+        return item.substring(0,limit)+'...'
+      }else{
+        return item
+      }
+    }else{
+      return undefined
+    }
   }

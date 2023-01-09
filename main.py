@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 #install fastapi (pip) and uvicorn files
 from fastapi.middleware.cors import CORSMiddleware
 import Scripts.system as System
@@ -24,3 +25,10 @@ async def root():
 @app.get("/api/uptime")
 async def root():
     return System.uptime()
+
+@app.get("/api/temps")
+async def root():
+    return System.temps()
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
