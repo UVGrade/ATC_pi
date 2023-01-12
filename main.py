@@ -30,5 +30,10 @@ async def root():
 async def root():
     return System.temps()
 
+@app.get("/api/storage")
+async def storage():
+    return System.disks()
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
