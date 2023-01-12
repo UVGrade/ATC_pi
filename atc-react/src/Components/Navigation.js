@@ -25,7 +25,7 @@ export default function Navigation(props){
     }else if(location.pathname=='/settings'){
       setTitle('Settings')
     }
-  }, [location]);
+  }, []);
   console.log(location.pathname);
     return (
       <div>

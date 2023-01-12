@@ -8,13 +8,18 @@ class System extends React.Component {
   constructor(props){
     super(props);
     this.state= {
-      showTemps: true
+      showTemps: true,
+      showStorage: true
     }
     this.toggleTemp= this.toggleTemp.bind(this);
+    this.toggleStorage= this.toggleStorage.bind(this);
   }
 
   toggleTemp(e){
     this.setState({showTemps: !this.state.showTemps})
+  }
+  toggleStorage(e){
+    this.setState({showStorage: !this.state.showStorage})
   }
 
   render(){
@@ -24,8 +29,8 @@ class System extends React.Component {
         <hr/>
         <h2 className="sectionDivider" onClick= {(e) => {this.toggleTemp(e)}} >Temps {this.state.showTemps?"+":"-"}</h2>
         {this.state.showTemps?<TempsSection />:null}
-        <h2 className="sectionDivider">Storage</h2>
-        <StorageSection />
+        <h2 className="sectionDivider" onClick= {(e) => {this.toggleStorage(e)}}>Storage {this.state.showStorage?"+":"-"}</h2>
+        {this.state.showStorage?<StorageSection />:null}
         <h2 className="sectionDivider">Networking</h2>
       </div>
     );
@@ -49,10 +54,9 @@ function StorageSection(){
 
   return(
     <div className="arrangeHorizont">
-      {disks.map(({dev,mount,total})=>{
+      {disks.map(({dev,mount,used,total})=>{
         return(
-          <Widget key={dev} sub={mount} title={dev}>{total}</Widget>
-          
+          <Widget key={dev} sub={mount} title={dev}><StorageFormat used={used} total={total}/></Widget>
         );
       })}
     </div>
@@ -77,7 +81,7 @@ function TempsSection(){
     <div className="arrangeHorizont">
       {temps.map(({id,temp_m,temp_f,alias})=>{
         return(
-          <Widget key={id} title={alias}>{temp_f} °{temp_f?'F':'C'}</Widget>
+          <Widget key={id} title={alias}>{temp_f} °{temp_m?'C':'F'}</Widget>
           
         );
       })}
@@ -140,4 +144,32 @@ function Limit(item){
   }else{
     return undefined
   }
+}
+
+function StorageFormat(props){
+  var percent= Math.round(props.used / props.total * 1000)/10
+  var total=props.total
+  var measure='B'
+  if(total>1000){
+    total=total/1000
+    measure='KB'
+  }
+  if(total>1000){
+    total=total/1000
+    measure="MB"
+  }
+  if(total>1000){
+    total=total/1000
+    measure="GB"
+  }
+  if(total>1000){
+    total=total/1000
+    measure="TB"
+  }
+  total=Math.round(total * 10)/10
+  return(
+    <div>
+      {percent}%<div className="subCard">Total {total+' '+measure}</div>
+    </div>
+  );
 }

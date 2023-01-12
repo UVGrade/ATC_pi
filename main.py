@@ -3,6 +3,8 @@ import uvicorn
 #install fastapi (pip) and uvicorn files
 from fastapi.middleware.cors import CORSMiddleware
 import Scripts.system as System
+import Scripts.settings as Settings
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -33,6 +35,18 @@ async def root():
 @app.get("/api/storage")
 async def storage():
     return System.disks()
+
+@app.get("/api/settings")
+async def settings():
+    return Settings.readSettings()
+
+class Item(BaseModel):
+    metric:bool
+
+@app.post("/api/settings")
+async def setSave(item: Item):
+    Settings.saveSettings(item)
+    return item
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

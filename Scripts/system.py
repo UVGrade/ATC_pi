@@ -1,10 +1,13 @@
 import os
 import json
-import psutil, datetime
+import psutil, datetime #pip install psutil
 import time
-#pip install psutil
+
+import Scripts.settings as Settings
 
 sys_temps="/sys/class/thermal/"
+
+
 
 def uptime():
     tstamp= psutil.boot_time()
@@ -46,11 +49,16 @@ def disks():
 
 
 def temp_1(file):
+    metric=Settings.readSettings()['metric']
     try:
         with open(sys_temps + file + '/temp') as f:
-            temp=float(f.readline().strip())/1000
+            temp_f= temp=float(f.readline().strip())/1000
+            if not metric:
+                temp_f= round((temp * 9 / 5)+32,1)
+
     except ValueError:
         temp=None
+        temp_f=None
     try:
         with open(sys_temps + file + '/type') as f:
             type=f.readline().strip()
@@ -59,8 +67,8 @@ def temp_1(file):
     return {
         "id":file,
         "alias":type,
-        "temp_f":temp,
-        'temp_m':False,
+        "temp_f":temp_f,
+        'temp_m':metric,
         "temp":temp,
         "type":type
     }
@@ -68,5 +76,5 @@ def temp_1(file):
 
 
 #print(shutil.disk_usage('/boot/efi'))
-json_formatted_str = json.dumps(disks(), indent=2)
+#son_formatted_str = json.dumps(disks(), indent=2)
 #print(json_formatted_str)

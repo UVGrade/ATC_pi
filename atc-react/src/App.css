@@ -155,3 +155,7 @@ html body {
   border-bottom: 1px solid;
   padding-bottom: 10px;
 }
+
+.subCard{
+  font-size: 13px;
+}
