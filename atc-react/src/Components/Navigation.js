@@ -12,35 +12,32 @@ import { propTypes } from "react-bootstrap/esm/Image";
 
 export default function Navigation(props){
 
-  const [title,setTitle] = useState('Dashboard');
+  var title2='Dashbaord'
 
   const location = useLocation();
-  useEffect(() => {
-    if(location.pathname=='/system'){
-      setTitle('System')
-    }else if(location.pathname=='/workers'){
-      setTitle('Workers')
-    }else if(location.pathname=='/docs'){
-      setTitle('Docs')
-    }else if(location.pathname=='/settings'){
-      setTitle('Settings')
-    }
-  }, []);
+ 
   console.log(location.pathname);
+  if(location.pathname=='/settings'){
+    title2='Settings'
+  }else if(location.pathname=='/workers'){
+    title2='Workers'
+  }else if(location.pathname=='/system'){
+    title2='System'
+  }
     return (
       <div>
       <div className="topnav">
         <div className="topLeft">
           <h3>Pi_ATC <img src={hmb} height="40px" alt="UVGrade" /></h3>
-          <h3>{title}</h3>
+          <h3>{title2}</h3>
         </div>
       </div>
       <div className="sidenav">
         <a href="/">Dashboard</a>
-        <a href="/system">System</a>
-        <a href="/workers">Workers</a>
-        <a href="/docs">Docs</a>
-        <a href="/settings">Settings</a>
+        <a href="/#/system">System</a>
+        <a href="/#/workers">Workers</a>
+        <a href="/#/docs">Docs</a>
+        <a href="/#/settings">Settings</a>
       </div>
       
       <div className="mainPage">{props.children}</div>

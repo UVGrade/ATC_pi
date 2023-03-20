@@ -9,7 +9,7 @@ import System from "./pages/System";
 import Workers from "./pages/Workers";
 import Settings from "./pages/Settings";
 
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import { Route, Routes, HashRouter as Router } from "react-router-dom";
 import { Navbar } from "react-bootstrap";
 
 

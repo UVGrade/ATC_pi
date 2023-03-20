@@ -2,6 +2,8 @@ from fastapi import FastAPI
 import uvicorn
 #install fastapi (pip) and uvicorn files
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.staticfiles import StaticFiles
+
 import Scripts.system as System
 import Scripts.settings as Settings
 from pydantic import BaseModel
@@ -20,12 +22,10 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 
 @app.get("/api/uptime")
 async def root():
+    print("uptime")
     return System.uptime()
 
 @app.get("/api/temps")
@@ -47,6 +47,9 @@ class Item(BaseModel):
 async def setSave(item: Item):
     Settings.saveSettings(item)
     return item
+
+
+app.mount("/", StaticFiles(directory="./atc-react/build/", html=True),name="static")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
