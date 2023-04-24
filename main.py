@@ -2,19 +2,23 @@ from fastapi import FastAPI
 import uvicorn
 #install fastapi (pip) and uvicorn files
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.requests import Request
 from starlette.staticfiles import StaticFiles
+
+from fastapi.templating import Jinja2Templates
 
 import Scripts.system as System
 import Scripts.settings as Settings
 from pydantic import BaseModel
 
-app = FastAPI()
+app = FastAPI(title="ATC_Pi")
+apiApp = FastAPI()
 
 origins = [
     "http://localhost:3000",
     "localhost:3000"
 ]
-app.add_middleware(
+apiApp.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
@@ -23,33 +27,35 @@ app.add_middleware(
 )
 
 
-@app.get("/api/uptime")
+
+@apiApp.get("/uptime")
 async def root():
-    print("uptime")
     return System.uptime()
 
-@app.get("/api/temps")
+@apiApp.get("/temps")
 async def root():
     return System.temps()
 
-@app.get("/api/storage")
+@apiApp.get("/storage")
 async def storage():
     return System.disks()
 
-@app.get("/api/settings")
+@apiApp.get("/settings")
 async def settings():
     return Settings.readSettings()
 
 class Item(BaseModel):
     metric:bool
 
-@app.post("/api/settings")
+@apiApp.post("/settings")
 async def setSave(item: Item):
     Settings.saveSettings(item)
     return item
 
 
-app.mount("/", StaticFiles(directory="./atc-react/build/", html=True),name="static")
+
+app.mount("/api", apiApp)
+app.mount("/", StaticFiles(directory="atc-react/build", html=True), name="react")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
