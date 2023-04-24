@@ -1,5 +1,6 @@
 import {Form, Button} from 'react-bootstrap';
 import React, { useEffect, useState }  from "react";
+import '../Components/global'
 
 function Settings(){
   const [metric,setMetric]= useState(false);
@@ -9,7 +10,7 @@ function Settings(){
   }
 
   const fetchSettings = async () =>{
-    const response = await fetch("http://localhost:8000/api/settings")
+    const response = await fetch(global.config.mainUrl+":8000/api/settings")
     const settJ= await response.json()
     console.log(settJ)
     
@@ -29,7 +30,7 @@ function Settings(){
         metric:metric
       }
       console.log(details)
-      let response= await fetch("http://localhost:8000/api/settings",{
+      let response= await fetch(global.config.mainUrl+":8000/api/settings",{
         method:"POST",
         headers:{
           "Content-Type":"application/json"

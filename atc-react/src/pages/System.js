@@ -1,4 +1,5 @@
 import React, { useEffect, useState }  from "react";
+import '../Components/global'
 
 const TodosContext = React.createContext({
     upT: [], setUpT: () => {}
@@ -42,7 +43,7 @@ function StorageSection(){
   const [disks,setDisks]= useState([]);
 
   const fetchDisks = async () =>{
-    const response = await fetch("http://localhost:8000/api/storage")
+    const response = await fetch(global.config.mainUrl+":8000/api/storage")
     const storeJ= await response.json()
     console.log(storeJ)
     setDisks(storeJ)
@@ -68,7 +69,7 @@ function TempsSection(){
   
   const fetchTemps = async () => {
       
-      const response = await fetch("http://localhost:8000/api/temps")
+      const response = await fetch(global.config.mainUrl+":8000/api/temps")
       const tempJ= await response.json()
       setTemps(tempJ)
   }
@@ -94,7 +95,7 @@ function UptimeSection(){
   const [upT,setUpT] = useState('...');
 const [bootT,setBootT]= useState('///');
 const fetchupT = async () => {
-    const response = await fetch("http://localhost:8000/api/uptime")
+    const response = await fetch(global.config.mainUrl+":8000/api/uptime")
     const TimeUp = await response.json()
     console.log(TimeUp)
     var formatBoot= new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(TimeUp.timestamp * 1000)
